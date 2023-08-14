@@ -17,9 +17,10 @@ async function run() {
     const project = await graphqlInstance.query(getProjectInfoByNameWithUser(projectName))
 
     core.info(`Project ${JSON.stringify(project)} ...`);
-
+    core.debug(project);
     core.debug(JSON.stringify(project));
   } catch (error) {
+    core.info(`error ${error} ...`);
     core.setFailed(error.message);
   }
 }
