@@ -1,6 +1,27 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 733:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const {graphql} = __nccwpck_require__(125);
+
+
+class graphqlApi {
+    token;
+    constructor(token) {
+        this.token = token;
+    }
+
+    query(q) {
+        return graphql(q, {...{headers: {authorization: `bearer ${this.token}`}}});
+    }
+}
+
+module.exports = graphqlApi;
+
+/***/ }),
+
 /***/ 351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -2705,6 +2726,22 @@ module.exports = wait;
 
 /***/ }),
 
+/***/ 716:
+/***/ ((module) => {
+
+module.exports = eval("require")("@actions/github");
+
+
+/***/ }),
+
+/***/ 125:
+/***/ ((module) => {
+
+module.exports = eval("require")("@octokit/graphql");
+
+
+/***/ }),
+
 /***/ 491:
 /***/ ((module) => {
 
@@ -2835,20 +2872,28 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const core = __nccwpck_require__(186);
+const github = __nccwpck_require__(716);
+
 const wait = __nccwpck_require__(258);
+const graphqlApi = __nccwpck_require__(733);
 
 
 // most @actions toolkit packages have async methods
 async function run() {
   try {
-    const ms = core.getInput('milliseconds');
-    core.info(`Waiting ${ms} milliseconds ...`);
+    const projectName = core.getInput('projectName');
+    const targetCol = '' // core.getInput('targetCol');
+    const userName = '' // core.getInput('targetCol');
+    const githubToken = core.getInput('github_token');
 
-    core.debug((new Date()).toTimeString()); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-    await wait(parseInt(ms));
-    core.info((new Date()).toTimeString());
+    const graphqlInstance = new graphqlApi(githubToken);
 
-    core.setOutput('time', new Date().toTimeString());
+    core.info(`getting project info ...`);
+    const project = await graphqlInstance.query(getProjectInfoByNameWithUser(projectName))
+
+    core.info(`Project ${JSON.stringify(project)} ...`);
+
+    core.debug(JSON.stringify(project));
   } catch (error) {
     core.setFailed(error.message);
   }
