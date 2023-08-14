@@ -1,8 +1,6 @@
 const core = require('@actions/core');
-const github = require('@actions/github');
-
-const wait = require('./wait');
 const graphqlApi = require('./graphql');
+const { getProjectInfoByNameWithUser } = require('./graphql/queries');
 
 
 // most @actions toolkit packages have async methods

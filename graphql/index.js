@@ -2,7 +2,6 @@ const {graphql} = require("@octokit/graphql");
 
 
 class graphqlApi {
-    token;
     constructor(token) {
         this.token = token;
     }

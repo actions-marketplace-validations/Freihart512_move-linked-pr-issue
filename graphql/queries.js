@@ -21,3 +21,7 @@ function getProjectInfoByNameWithUser(projectName, user){
       }
     }`
 }
+
+module.exports = {
+    getProjectInfoByNameWithUser
+}
