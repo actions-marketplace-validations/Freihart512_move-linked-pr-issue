@@ -20,6 +20,7 @@ function getProjectInfoByNameWithUser(projectName, user){
         }
       }
     }`
+    return q
 }
 
 module.exports = {
