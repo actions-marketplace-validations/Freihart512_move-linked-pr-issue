@@ -27,30 +27,49 @@ module.exports = graphqlApi;
 function getProjectInfoByNameWithUser(projectName, user){
     const q = `
     {
-      projectsV2(first:1 query:"${projectName}") {
-        edges {
-          node {
-            id
-            title
-            field(name:"Status"){
-              __typename
-               ... on ProjectV2SingleSelectField{
-                 id
-                options{
-                  id
-                  name
-                }
+      user(login: "${user}") {
+        ${ProjectByName(projectName)}
+      }
+    }`
+    return q
+}
+
+function getProjectInfoByNameWithOrg(projectName, orgName){
+  const q = `
+  {
+    organization(login: "${orgName}") {
+      ${ProjectByName(projectName)}
+    }
+  }`
+  return q
+}
+
+function ProjectByName (projectName){
+  return `
+    projectsV2(first:1 query:"${projectName}") {
+      edges {
+        node {
+          id
+          title
+          field(name:"Status"){
+            __typename
+             ... on ProjectV2SingleSelectField{
+               id
+              options{
+                id
+                name
               }
             }
           }
         }
       }
     }`
-    return q
 }
 
 module.exports = {
-    getProjectInfoByNameWithUser
+  getProjectInfoByNameWithUser,
+  getProjectInfoByNameWithOrg,
+
 }
 
 /***/ }),
@@ -7861,21 +7880,23 @@ var __webpack_exports__ = {};
 (() => {
 const core = __nccwpck_require__(2186);
 const graphqlApi = __nccwpck_require__(5733);
-const { getProjectInfoByNameWithUser } = __nccwpck_require__(6525);
+const { getProjectInfoByNameWithUser, getProjectInfoByNameWithOrg } = __nccwpck_require__(6525);
 
 
 // most @actions toolkit packages have async methods
 async function run() {
   try {
-    const projectName = core.getInput('projectName');
+    const projectName = core.getInput('project_name');
+    const userName = core.getInput('user_name');
+    const orgName = core.getInput('org_name');
     const targetCol = '' // core.getInput('targetCol');
-    const userName = '' // core.getInput('targetCol');
     const githubToken = core.getInput('github_token');
 
     const graphqlInstance = new graphqlApi(githubToken);
 
     core.info(`getting project info ...`);
-    const project = await graphqlInstance.query(getProjectInfoByNameWithUser(projectName))
+    const getProjectQuery = orgName ? getProjectInfoByNameWithOrg(projectName, userName) : getProjectInfoByNameWithUser(projectName, userName) 
+    const project = await graphqlInstance.query(getProjectQuery)
 
     core.info(`Project ${JSON.stringify(project)} ...`);
     core.debug(project);

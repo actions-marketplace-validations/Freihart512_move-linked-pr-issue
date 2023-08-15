@@ -1,13 +1,21 @@
 name: 'moveCards'
 description: 'move a card in teh project toa specific column'
 inputs:
-  projectNAme:  # id of input
+  project_name:  # id of input
     description: 'name of the target project'
     required: true
     default: ''
   github_token:
     description: GitHub token.
+    required: true
+  org_name:
+    description: Org name.
     required: false
+    default: ''
+  user_name:
+    description: user Name.
+    required: false
+    default: ''
 runs:
   using: 'node16'
   main: 'dist/index.js'
