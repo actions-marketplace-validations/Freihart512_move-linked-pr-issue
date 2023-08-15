@@ -7896,9 +7896,10 @@ async function run() {
 
     core.info(`getting project info ...`);
     const getProjectQuery = orgName ? getProjectInfoByNameWithOrg(projectName, userName) : getProjectInfoByNameWithUser(projectName, userName) 
+    core.info(getProjectQuery);
     const project = await graphqlInstance.query(getProjectQuery)
 
-    core.info(`Project ${JSON.stringify(project)} ...`);
+    core.info(`Project ${JSON.stringify(project)}`);
     core.debug(project);
     core.debug(JSON.stringify(project));
   } catch (error) {
