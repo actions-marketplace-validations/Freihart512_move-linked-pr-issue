@@ -7,7 +7,7 @@ class graphqlApi {
     }
 
     query(q) {
-        return  this.octokit.graphql(q, {...{headers: {authorization: `token ${this.token}`}}});
+        return  this.octokit.graphql(q);
     }
 }
 
