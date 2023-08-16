@@ -1,13 +1,13 @@
-const {graphql} = require("@octokit/graphql");
-
+//const {graphql} = require("@octokit/graphql");
+const { Octokit } = require("octokit");
 
 class graphqlApi {
     constructor(token) {
-        this.token = token;
+        this.octokit = new Octokit({ auth: token });
     }
 
     query(q) {
-        return graphql(q, {...{headers: {authorization: `token ${this.token}`}}});
+        return  this.octokit.graphql(q, {...{headers: {authorization: `token ${this.token}`}}});
     }
 }
 
