@@ -7,7 +7,7 @@ class graphqlApi {
     }
 
     query(q) {
-        return graphql(q, {...{headers: {authorization: `bearer ${this.token}`}}});
+        return graphql(q, {...{headers: {authorization: `token ${this.token}`}}});
     }
 }
 
