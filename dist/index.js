@@ -42459,8 +42459,9 @@ async function run() {
     const orgName = core.getInput('org_name');
     const targetCol = '' // core.getInput('targetCol');
     const githubToken = core.getInput('github_token');
+    const personalToken = core.getInput('personal_token');
 
-    const graphqlInstance = new graphqlApi(githubToken);
+    const graphqlInstance = new graphqlApi(personalToken);
 
     core.info(`getting project info ...`);
     const getProjectQuery = orgName ? getProjectInfoByNameWithOrg(projectName, userName) : getProjectInfoByNameWithUser(projectName, userName) 
